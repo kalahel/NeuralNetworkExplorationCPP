@@ -2,6 +2,9 @@
 #include <fstream>
 #include <cstring>
 #include <unistd.h>
+#include <random>
+#include <time.h>
+#include <chrono>
 #include "Functions/Linear.h"
 #include "Neurons/Neuron.h"
 
@@ -12,7 +15,9 @@ void simpleNeuralExample();
 
 void trainNeuralMultiple();
 
-std::vector<float> generateNoise(std::vector<float> *inputs,int numberOfModification);
+std::vector<float> generateNoise(std::vector<float> *inputs, int numberOfModification);
+
+void displayImage(std::vector<float> *inputs);
 
 int main() {
 
@@ -34,13 +39,23 @@ int main() {
 
     float error = 10.0;
 
+    //displayImage(&representationA);
+
+    vector<float> noisyA = generateNoise(&representationA, 1);
+    displayImage(&noisyA);
+
+
     for (int i = 0; i < TRAINING_ITERATION; ++i) {
         //std::cout << "Computation : " << neuronA.compute(&representationA) << std::endl;
         error = neuronA.trainWeights(&representationA, expectedValueA);
         error += neuronA.trainWeights(&representationC, expectedValueC);
-        std::cout << "New error " << error << std::endl;
-        errorFile << error << ",";
+        //std::cout << "New error " << error << std::endl;
+        //errorFile << error << ",";
     }
+
+    std::cout << "Computation : " << neuronA.compute(&noisyA) << std::endl;
+
+
 
     errorFile.close();
 
@@ -115,10 +130,30 @@ void trainNeuralMultiple() {
 }
 
 std::vector<float> generateNoise(std::vector<float> *inputs, int numberOfModification) {
+    srand(static_cast<unsigned int>(getpid() * time(NULL)));
     vector<float> result = {};
+    vector<int> indexToModify = {};
+    for (int j = 0; j < numberOfModification; ++j) {
+        indexToModify.push_back((int)(random() % inputs->size()));
+    }
     for (int i = 0; i < inputs->size(); ++i) {
-        
+       result.push_back((*inputs)[i]);
+    }
+    for (int k = 0; k < indexToModify.size(); ++k) {
+        if(result[indexToModify[k]] == 1.0)
+            result[indexToModify[k]] = 0.0;
+        else
+            result[indexToModify[k]] = 1.0;
     }
     return result;
+}
+
+void displayImage(std::vector<float> *inputs) {
+    for (int i = 0; i < inputs->size(); ++i) {
+        std::cout << (*inputs)[i] << std::flush;
+        if((i+1) % 4 == 0){
+            std::cout << std::endl;
+        }
+    }
 }
 
