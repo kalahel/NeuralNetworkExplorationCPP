@@ -4,7 +4,7 @@
 
 #ifndef NEURALNETWORKEXPLORATION_NEURON_H
 #define NEURALNETWORKEXPLORATION_NEURON_H
-#define  LEARNING_RATE 0.1
+#define  LEARNING_RATE 0.01
 
 #include <vector>  //for std::vector
 #include <stdlib.h>
@@ -49,7 +49,7 @@ public:
 
     void printWeights();
 
-
+    virtual ~Neuron();
 };
 
 

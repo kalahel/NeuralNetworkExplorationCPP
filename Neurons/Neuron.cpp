@@ -47,6 +47,7 @@ float Neuron::trainWeights(std::vector<float> *inputs, float expectedOutput) {
     }
     return error;
 }
+
 float Neuron::trainWeightsMultipleExample(std::vector<std::vector<float>> *inputs, std::vector<float> *expectedOutput) {
     if ((*inputs).size() != (*expectedOutput).size()) {
         perror("Inputs and expectedOutputs size missmatch");
@@ -77,6 +78,8 @@ float Neuron::trainWeightsMultipleExample(std::vector<std::vector<float>> *input
 
     return errorSum;
 }
+
+Neuron::~Neuron() = default;
 
 
 
