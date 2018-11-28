@@ -39,7 +39,7 @@ float Neuron::trainWeights(std::vector<float> *inputs, float expectedOutput) {
     for (int i = 0; i < this->weights.size(); ++i) {
         if (i == 0) {
             this->weights[0] +=
-                    (error) * this->activationFunction->derivative(inputs, this, 1) * LEARNING_RATE;    // Bias
+                    (error) * this->activationFunction->derivative(inputs, this, 1) * LEARNING_RATE;    // Biais
         } else {
             this->weights[i] +=
                     error * this->activationFunction->derivative(inputs, this, (*inputs)[i - 1]) * LEARNING_RATE;

@@ -41,7 +41,7 @@ int main() {
 
     //displayImage(&representationA);
 
-    vector<float> noisyA = generateNoise(&representationA, 1);
+    vector<float> noisyA = generateNoise(&representationC, 10);
     displayImage(&noisyA);
 
 
@@ -55,6 +55,17 @@ int main() {
 
     std::cout << "Computation : " << neuronA.compute(&noisyA) << std::endl;
 
+    // Computation of average value for increasingly noisy images
+    vector<float> noisyImage;
+    for (int j = 1; j < 21; ++j) {
+        float averageValue = 0.0;
+        noisyImage = generateNoise(&representationC, j);
+        for (int i = 0; i < 100; ++i) {
+            averageValue += neuronA.compute(&noisyImage);
+        }
+        averageValue = averageValue / 100;
+        errorFile << averageValue << ",";
+    }
 
 
     errorFile.close();
@@ -134,13 +145,13 @@ std::vector<float> generateNoise(std::vector<float> *inputs, int numberOfModific
     vector<float> result = {};
     vector<int> indexToModify = {};
     for (int j = 0; j < numberOfModification; ++j) {
-        indexToModify.push_back((int)(random() % inputs->size()));
+        indexToModify.push_back((int) (random() % inputs->size()));
     }
     for (int i = 0; i < inputs->size(); ++i) {
-       result.push_back((*inputs)[i]);
+        result.push_back((*inputs)[i]);
     }
     for (int k = 0; k < indexToModify.size(); ++k) {
-        if(result[indexToModify[k]] == 1.0)
+        if (result[indexToModify[k]] == 1.0)
             result[indexToModify[k]] = 0.0;
         else
             result[indexToModify[k]] = 1.0;
@@ -151,7 +162,7 @@ std::vector<float> generateNoise(std::vector<float> *inputs, int numberOfModific
 void displayImage(std::vector<float> *inputs) {
     for (int i = 0; i < inputs->size(); ++i) {
         std::cout << (*inputs)[i] << std::flush;
-        if((i+1) % 4 == 0){
+        if ((i + 1) % 4 == 0) {
             std::cout << std::endl;
         }
     }
